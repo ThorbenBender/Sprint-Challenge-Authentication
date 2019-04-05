@@ -17,8 +17,13 @@ module.exports = (server) => {
 
 function register(req, res) {
 	// implement user registration
+	const credentials = req.body;
+	const hash = bcrypt.hashSync(credentials.password, 10);
+
+	credentials.password = hash;
+
 	db('users')
-		.insert(req.body)
+		.insert(credentials)
 		.then((user) => {
 			res.status(200).json(user);
 		})
